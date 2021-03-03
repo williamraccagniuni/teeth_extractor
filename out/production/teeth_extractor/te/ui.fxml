@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="te.Controller">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#load_image" text="Carica File" />
+                  <MenuItem mnemonicParsing="false" onAction="#exit_program" text="Esci" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+
+      <Text fx:id="flm" strokeType="OUTSIDE" strokeWidth="0.0" />
+
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+         <children>
+            <VBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stage dx:" />
+                  <ChoiceBox fx:id="stage_dx" prefWidth="150.0" />
+               </children>
+            </VBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <Slider fx:id="dx_heightbar" onMouseReleased="#dx_image_height_update" orientation="VERTICAL" rotate="180.0" />
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                     <children>
+                        <Slider fx:id="dx_widthbar" onMouseReleased="#dx_image_width_update" />
+                        <ImageView fx:id="imageview_dx" fitHeight="350.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                     <children>
+                        <Slider fx:id="sx_widthbar" onMouseReleased="#sx_image_width_update" />
+                        <ImageView fx:id="imageview_sx" fitHeight="350.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </VBox>
+                  <Slider fx:id="sx_heightbar" onMouseReleased="#sx_image_height_update" orientation="VERTICAL" rotate="180.0" />
+               </children>
+            </HBox>
+            <VBox alignment="CENTER" layoutX="18.0" layoutY="10.0" spacing="10.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stage sx:" />
+                  <ChoiceBox fx:id="stage_sx" prefWidth="150.0" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="BOTTOM_CENTER" spacing="20.0">
+         <children>
+            <VBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Soggetto:" />
+                  <TextField fx:id="subject" alignment="BOTTOM_CENTER" promptText="n.o soggetto: es. 1, 2, 3, .." />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Razza:" />
+                  <ChoiceBox fx:id="race" prefWidth="150.0" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" layoutX="310.0" layoutY="10.0" spacing="10.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sesso:" />
+                  <ChoiceBox fx:id="sex" prefWidth="150.0" />
+               </children>
+            </VBox>
+            <VBox spacing="10.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Età (lasciare vuoto se sconosciuta):" />
+                  <TextField fx:id="age" alignment="CENTER" promptText="età: es. 26.5, 16, ecc." />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <Button fx:id="save_button" alignment="CENTER" mnemonicParsing="false" onAction="#save" text="Salva" />
+   </children>
+</VBox>
