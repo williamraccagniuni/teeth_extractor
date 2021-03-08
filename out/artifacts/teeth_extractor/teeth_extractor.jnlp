@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="teeth_extractor.jar" size="9191" download="eager" />
+    <jar href="teeth_extractor.jar" size="10810" download="eager" />
   </resources>
   <jfx:javafx-desc  width="600" height="400" main-class="te.Main"  name="teeth_extractor" />
   <update check="background"/>

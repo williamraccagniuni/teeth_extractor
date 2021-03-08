@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="te.Controller">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDropped="#handleDrop" onDragOver="#handleDragOver" spacing="10.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="te.Controller">
    <children>
       <MenuBar>
         <menus>
@@ -24,6 +24,9 @@
           </Menu>
         </menus>
       </MenuBar>
+      <Text fx:id="section_size_text" strokeType="OUTSIDE" strokeWidth="0.0" />
+
+      <ImageView fx:id="image_preview" fitHeight="150.0" pickOnBounds="true" preserveRatio="true" />
 
       <Text fx:id="flm" strokeType="OUTSIDE" strokeWidth="0.0" />
 
