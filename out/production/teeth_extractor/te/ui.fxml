@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -34,8 +37,12 @@
          <children>
             <VBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stage dx:" />
-                  <ChoiceBox fx:id="stage_dx" prefWidth="150.0" />
+                  <Text layoutX="10.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dente Dx non presente:" />
+                  <CheckBox fx:id="dx_np" mnemonicParsing="false" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Demirijian's Stage dx:" />
+                  <ChoiceBox fx:id="demirijian_stage_dx" prefWidth="150.0" />
+                  <Text layoutX="10.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Moorrees's Stage dx:" />
+                  <ChoiceBox fx:id="moorrees_stage_dx" layoutX="10.0" layoutY="185.0" prefWidth="150.0" />
                </children>
             </VBox>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
@@ -62,8 +69,12 @@
             </HBox>
             <VBox alignment="CENTER" layoutX="18.0" layoutY="10.0" spacing="10.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stage sx:" />
-                  <ChoiceBox fx:id="stage_sx" prefWidth="150.0" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dente Sx non presente:" />
+                  <CheckBox fx:id="sx_np" mnemonicParsing="false" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Demirijian's Stage sx:" />
+                  <ChoiceBox fx:id="demirijian_stage_sx" prefWidth="150.0" />
+                  <Text layoutX="11.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Moorrees's Stage sx:" />
+                  <ChoiceBox fx:id="moorrees_stage_sx" layoutX="10.0" layoutY="185.0" prefWidth="150.0" />
                </children>
             </VBox>
          </children>
@@ -73,7 +84,7 @@
             <VBox alignment="CENTER" spacing="10.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Soggetto:" />
-                  <TextField fx:id="subject" alignment="BOTTOM_CENTER" promptText="n.o soggetto: es. 1, 2, 3, .." />
+                  <TextField fx:id="subject" alignment="BOTTOM_CENTER" promptText="nome o numero" />
                </children>
             </VBox>
             <VBox alignment="CENTER" spacing="10.0">
@@ -90,11 +101,36 @@
             </VBox>
             <VBox spacing="10.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Età (lasciare vuoto se sconosciuta):" />
-                  <TextField fx:id="age" alignment="CENTER" promptText="età: es. 26.5, 16, ecc." />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Anni (lasciare vuoto se sconosciuti):" />
+                  <TextField fx:id="subject_years" alignment="CENTER" promptText="anni, es.: 16,17,18,..." />
+               </children>
+            </VBox>
+            <VBox layoutX="699.0" layoutY="10.0" spacing="10.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mesi (lasciare vuoto se sconosciuti):" />
+                  <TextField fx:id="subject_months" alignment="CENTER" promptText="mesi, tra 0 e 11" />
                </children>
             </VBox>
          </children>
+      </HBox>
+      <HBox alignment="CENTER" spacing="50.0">
+         <children>
+            <VBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Data di Nascita del Soggetto (anche ipotetica, lasciare vuoto nel caso di dubbio)" />
+                  <DatePicker fx:id="birth_date" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" layoutX="354.0" layoutY="10.0" spacing="10.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Data di Acquisizione della Ortopantomografia (anche ipotetica, lasciare vuoto nel caso di dubbio)" />
+                  <DatePicker fx:id="opg_date" />
+               </children>
+            </VBox>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </HBox>
       <Button fx:id="save_button" alignment="CENTER" mnemonicParsing="false" onAction="#save" text="Salva" />
    </children>

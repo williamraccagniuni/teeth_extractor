@@ -6,9 +6,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,12 +31,16 @@ import static java.awt.image.BufferedImage.TYPE_INT_RGB;
 public class Controller implements Initializable {
 
 
-    ObservableList list= FXCollections.observableArrayList();
+    ObservableList<String> list= FXCollections.observableArrayList();
+
+    //Images variables
     Image image;
-    //BufferedImage image_dx, image_sx;
     int dxstart_x, dxstart_y, sxstart_x, sxstart_y;
-    //int section_size = 200;
     int section_size;
+    String image_path;
+
+    //bar percentage
+    Double dx_x_bar_per, dx_y_bar_per;
 
     //Cross Color
     int cross_red = 0;
@@ -46,16 +48,23 @@ public class Controller implements Initializable {
     int cross_blue = 0;
     double cross_alpha = 0.5;
 
+    //UI Eleements
     @FXML
-    ChoiceBox stage_dx, stage_sx, race, sex;
+    ChoiceBox<String> demirijian_stage_dx, demirijian_stage_sx, moorrees_stage_dx, moorrees_stage_sx, race, sex;
     @FXML
-    TextField subject, age;
+    TextField subject, subject_years, subject_months;
     @FXML
     Text flm, section_size_text;
     @FXML
     ImageView imageview_dx, imageview_sx, image_preview;
     @FXML
     Slider dx_widthbar, dx_heightbar, sx_widthbar, sx_heightbar;
+    @FXML
+    CheckBox dx_np, sx_np;
+    @FXML
+    DatePicker birth_date, opg_date;
+
+    //===Inizialization===
 
     private int get_section_size(String path){
         try{
@@ -84,28 +93,142 @@ public class Controller implements Initializable {
 
     }
 
+    private Double get_dx_x_bar_per(String path){
+        try{
+
+            BufferedReader brTest = new BufferedReader(new FileReader(path));
+            String text = brTest.readLine();
+            text = brTest.readLine();
+            // Two times. text is the second line.
+            //System.out.println(text);
+            String[] tokens = text.split(" ");
+            //System.out.println(Arrays.toString(strArray));
+
+            if(tokens[0].equals("initial_bar_dx_x_percentage") && tokens[1].equals("=")){
+
+                String number = tokens[2];
+                number = number.replaceAll("[^0-9.]", "");
+
+                return Double.parseDouble(number);
+
+            }else{
+                return -1.0;
+            }
+
+        }catch (IOException ex){
+            return -1.0;
+        }
+    }
+
+    private Double get_dx_y_bar_per(String path){
+        try{
+
+            BufferedReader brTest = new BufferedReader(new FileReader(path));
+            String text = brTest.readLine();
+            text = brTest.readLine();
+            text = brTest.readLine();
+            // Three times. text is the third line.
+            //System.out.println(text);
+            String[] tokens = text.split(" ");
+            //System.out.println(Arrays.toString(strArray));
+
+            if(tokens[0].equals("initial_bar_dx_y_percentage") && tokens[1].equals("=")){
+
+                String number = tokens[2];
+                number = number.replaceAll("[^0-9.]", "");
+
+                return Double.parseDouble(number);
+
+            }else{
+                return -1.0;
+            }
+
+        }catch (IOException ex){
+            return -1.0;
+        }
+    }
+
     private void set_stages(){
+
+        //demirijian
         list.removeAll(list);
-        list.addAll("dente non presente", "1", "2", "3", "4", "5", "6", "7", "8");
-        stage_dx.setValue("dente non presente");
-        stage_dx.getItems().addAll(list);
-        stage_sx.setValue("dente non presente");
-        stage_sx.getItems().addAll(list);
+        list.addAll("sconosciuto", "A", "B", "C", "D", "E", "F", "G", "H");
+        demirijian_stage_dx.setValue("sconosciuto");
+        demirijian_stage_dx.getItems().addAll(list);
+        demirijian_stage_sx.setValue("sconosciuto");
+        demirijian_stage_sx.getItems().addAll(list);
+
+
+        //moorrees
+        list.removeAll(list);
+        list.addAll("sconosciuto", "Ci", "Cco", "Coc", "Cr 1/2", "Cr 3/4", "Crc", "Ri", "R 1/4", "R 1/2",
+                "R 3/4", "Rc", "A 1/2", "Ac");
+        moorrees_stage_dx.setValue("sconosciuto");
+        moorrees_stage_dx.getItems().addAll(list);
+        moorrees_stage_sx.setValue("sconosciuto");
+        moorrees_stage_sx.getItems().addAll(list);
+
+
     }
 
     private void set_race() {
-        list.removeAll(list);
-        list.addAll("sconosciuta", "caucasoide", "mongoloide", "amerindioide", "negroide", "australoide");
-        race.setValue("sconosciuta");
-        race.getItems().addAll(list);
+        try {
+            BufferedReader brTest = new BufferedReader(new FileReader("race_list.cfg"));
+            String text = brTest.readLine();
+            text = text.replaceAll(" ", "");
+            String[] tokens = text.split(",");
+
+            int fal = 1;        //determines length of firstArray
+            int sal = tokens.length;   //determines length of secondArray
+            String[] result = new String[fal + sal];  //resultant array of size first array and second array
+            String[] sa = {"sconosciuta"};
+            System.arraycopy(sa, 0, result, 0, fal);
+            System.arraycopy(tokens, 0, result, fal, sal);
+
+            ObservableList<String> ol = FXCollections.observableArrayList(result);
+            race.setValue("sconosciuta");
+            race.getItems().addAll(ol);
+
+
+        }catch (IOException ex) {
+            list.removeAll(list);
+            list.addAll("sconosciuta", "caucasoide", "mongoloide", "amerindioide", "negroide", "australoide");
+            race.setValue("sconosciuta");
+            race.getItems().addAll(list);
+        }
     }
 
     private void set_sex(){
-        list.removeAll(list);
-        list.addAll("sconosciuto", "maschio", "femmina");
-        sex.setValue("sconosciuto");
-        sex.getItems().addAll(list);
-   }
+        try {
+            BufferedReader brTest = new BufferedReader(new FileReader("sex_list.cfg"));
+            String text = brTest.readLine();
+            text = text.replaceAll(" ", "");
+            String[] tokens = text.split(",");
+
+            int fal = 1;        //determines length of firstArray
+            int sal = tokens.length;   //determines length of secondArray
+            String[] result = new String[fal + sal];  //resultant array of size first array and second array
+            String[] sa = {"sconosciuto"};
+            System.arraycopy(sa, 0, result, 0, fal);
+            System.arraycopy(tokens, 0, result, fal, sal);
+
+            list.removeAll(list);
+            ObservableList<String> ol = FXCollections.observableArrayList(result);
+            list.addAll(ol);
+            sex.setValue("sconosciuto");
+            sex.getItems().addAll(list);
+
+
+        }catch (IOException ex){
+            list.removeAll(list);
+            list.addAll("sconosciuto", "maschio", "femmina");
+            sex.setValue("sconosciuto");
+            sex.getItems().addAll(list);
+        }
+
+
+
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -114,15 +237,18 @@ public class Controller implements Initializable {
         set_race();
 
         this.section_size = get_section_size("settings.cfg");
-
+        if(this.section_size == -1){ this.section_size = 200; }
         this.section_size_text.setText("Section size: " + section_size);
 
-        if(this.section_size == -1){
-            this.section_size = 200;
-        }
+        this.dx_x_bar_per = get_dx_x_bar_per("settings.cfg");
+        if(this.dx_x_bar_per == -1.0){ this.dx_x_bar_per = 0.15; }
 
+        this.dx_y_bar_per = get_dx_y_bar_per("settings.cfg");
+        if(this.dx_y_bar_per == -1.0){ this.dx_y_bar_per = 0.66; }
 
     }
+
+//----------------------------------------------------------------------
 
 
 
@@ -160,21 +286,23 @@ public class Controller implements Initializable {
         file = fileChooser.showOpenDialog(stage);
 
         if (file != null) {
-            //System.out.println(file.getPath());
+
             flm.setText("File caricato: " + file.getPath());
 
             image = new Image(file.toURI().toString());
 
+            this.image_path = file.getPath();
+
             image_preview.setImage(image);
 
-            dxstart_x = (int) ((image.getWidth() - section_size) * 0.15);
-            dxstart_y = (int) ((image.getHeight() - section_size) * 0.66);
+            dxstart_x = (int) ((image.getWidth() - section_size) * this.dx_x_bar_per);
+            dxstart_y = (int) ((image.getHeight() - section_size) * this.dx_y_bar_per);
 
             set_dx_widthbar();
             set_dx_heightbar();
             set_imagedx();
 
-            sxstart_x = (int) ((image.getWidth() - section_size) * 0.85);
+            sxstart_x = (int) ((image.getWidth() - section_size) * (1.0 - this.dx_x_bar_per) );
             sxstart_y = dxstart_y;
 
             set_sx_widthbar();
@@ -184,6 +312,9 @@ public class Controller implements Initializable {
 
     }
 
+
+
+    //DRAG N DROP
     public void handleDragOver(DragEvent dragEvent) {
 
         if(dragEvent.getDragboard().hasFiles()){
@@ -203,16 +334,18 @@ public class Controller implements Initializable {
 
             image = new Image(file.toURI().toString());
 
+            this.image_path = file.getPath();
+
             image_preview.setImage(image);
 
-            dxstart_x = (int) ((image.getWidth() - section_size) * 0.15);
-            dxstart_y = (int) ((image.getHeight() - section_size) * 0.66);
+            dxstart_x = (int) ((image.getWidth() - section_size) * this.dx_x_bar_per);
+            dxstart_y = (int) ((image.getHeight() - section_size) * this.dx_y_bar_per);
 
             set_dx_widthbar();
             set_dx_heightbar();
             set_imagedx();
 
-            sxstart_x = (int) ((image.getWidth() - section_size) * 0.85);
+            sxstart_x = (int) ((image.getWidth() - section_size) * (1.0 - this.dx_x_bar_per) );
             sxstart_y = dxstart_y;
 
             set_sx_widthbar();
@@ -222,6 +355,8 @@ public class Controller implements Initializable {
 
     }
 
+    //------------------------------------------------------------------------------
+
     public void exit_program(ActionEvent actionEvent) {
         System.exit(0);
     }
@@ -230,93 +365,147 @@ public class Controller implements Initializable {
 
         if(image != null){
 
-            if( isNumeric(this.age.getText()) || this.age.getText().isEmpty()){
+            if( (isInteger(this.subject_years.getText()) || this.subject_years.getText().isEmpty()) &&
+                    (isInteger(this.subject_months.getText()) || this.subject_months.getText().isEmpty())){
 
-                if(!this.subject.getText().isEmpty()){
+                if( ( this.subject_years.getText().isEmpty() || Integer.parseInt(this.subject_years.getText()) >= 0 ) &&
+                        ( this.subject_months.getText().isEmpty() || (Integer.parseInt(this.subject_months.getText()) >= 0
+                        && Integer.parseInt(this.subject_months.getText()) <= 11) ) ){
 
-                    CSVManager csvm = new CSVManager();
+                    if(!this.subject.getText().isEmpty()){
 
-                    String stage_dx, stage_sx, subject, race, sex, age;
+                        //Istanziazione CSVManager
+                        CSVManager csvm = new CSVManager();
 
-                    if(((String) this.stage_dx.getValue()).equals("dente non presente")){
-                        stage_dx = "tnp";
+                        //Variabili
+
+                        String tpdx, tpsx, demi_stage_dx, demi_stage_sx, moorrees_stage_dx, moorrees_stage_sx, subject,
+                                race, sex, subject_years, subject_months, birth_date, opg_date;
+
+                        if(this.dx_np.isSelected()){
+                            tpdx = "dente non presente";
+                        }else{
+                            tpdx = "dente presente";
+                        }
+
+                        if(this.sx_np.isSelected()){
+                            tpsx = "dente non presente";
+                        }else{
+                            tpsx = "dente presente";
+                        }
+
+                        demi_stage_dx = this.demirijian_stage_dx.getValue().toString();
+                        demi_stage_sx = this.demirijian_stage_sx.getValue().toString();
+                        moorrees_stage_dx = this.moorrees_stage_dx.getValue().toString();
+                        moorrees_stage_sx = this.moorrees_stage_sx.getValue().toString();
+
+                        subject = this.subject.getText();
+                        race = this.race.getValue().toString();
+                        sex = this.sex.getValue().toString();
+
+                        if(this.subject_years.getText().isEmpty()){
+                            subject_years = "sconosciuti";
+                        }else{
+                            subject_years = this.subject_years.getText();
+                        }
+
+                        if(this.subject_months.getText().isEmpty()){
+                            subject_months = "sconosciuti";
+                        }else{
+                            subject_months = this.subject_months.getText();
+                        }
+
+                        if(this.birth_date.getValue() == null){
+                            birth_date = "sconosciuta";
+                        }else{
+                            birth_date = this.birth_date.getValue().toString();
+                        }
+
+                        if(this.opg_date.getValue() == null){
+                            opg_date = "sconosciuta";
+                        }else{
+                            opg_date = this.opg_date.getValue().toString();
+                        }
+
+
+
+
+
+
+
+
+                        //check saved_files folder
+                        File theDir = new File("./saved_files");
+                        if (!theDir.exists()){
+                            theDir.mkdirs();
+                        }
+
+
+                        List<String[]> dataLines = new ArrayList<>();
+                        dataLines.add(new String[] { subject, tpdx, demi_stage_dx, moorrees_stage_dx,
+                                tpsx, demi_stage_sx, moorrees_stage_sx, race, sex, subject_years, subject_months,
+                                birth_date, opg_date,
+                                //technical data
+                                this.image_path,
+                                Integer.toString((int) this.image.getWidth()),
+                                Integer.toString((int) this.image.getHeight()),
+                                Integer.toString(this.section_size),
+                                Integer.toString(this.dxstart_x + (this.section_size / 2)),
+                                Integer.toString(this.dxstart_y + (this.section_size / 2)),
+                                Integer.toString(this.sxstart_x + (this.section_size / 2)),
+                                Integer.toString(this.sxstart_y + (this.section_size / 2))});
+
+                        csvm.save_to_csv(("./saved_files/soggetto_" + subject + ".csv"), dataLines);
+
+
+
+
+
+
+
+
+                        //Immagine dx
+
+                        BufferedImage bdxi = img_to_buffered(image).getSubimage(dxstart_x,dxstart_y, section_size, section_size);
+                        File imagedxfile = new File("./saved_files/soggetto_" + subject + "_dx.bmp");
+                        ImageIO.write(bdxi, "bmp", imagedxfile);
+
+                        //Immagine sx
+
+                        BufferedImage bsxi = img_to_buffered(image).getSubimage(sxstart_x,sxstart_y, section_size, section_size);
+                        File imagesxfile = new File("./saved_files/soggetto_" + subject + "_sx.bmp");
+                        ImageIO.write(bsxi, "bmp", imagesxfile);
+
+                        //Box message
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Info");
+                        alert.setHeaderText(null);
+                        alert.setContentText("I file "+ "soggetto_" + subject + "_dx.bmp, " + "soggetto_" + subject + "_sx.bmp e "
+                                + "soggetto_" + subject + ".csv" + " sono stati salvati con successo in saved_files.");
+                        alert.showAndWait();
+
+
                     }else{
-                        stage_dx = (String) this.stage_dx.getValue();
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Soggetto: campo vuoto");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Il valore del soggetto non è presente.");
+                        alert.showAndWait();
                     }
 
-                    if(((String) this.stage_sx.getValue()).equals("dente non presente")){
-                        stage_sx = "tnp";
-                    }else{
-                        stage_sx = (String) this.stage_sx.getValue();
-                    }
-
-                    subject = this.subject.getText();
-
-
-
-                    if(((String) this.race.getValue()).equals("sconosciuta")){
-                        race = "na";
-                    }else{
-                        race = (String) this.race.getValue();
-                    }
-
-                    if(((String) this.sex.getValue()).equals("sconosciuto")){
-                        sex = "na";
-                    }else{
-                        sex = (String) this.sex.getValue();
-                    }
-
-                    if(this.age.getText().isEmpty()){
-                        age = "na";
-                    }else{
-                        age = this.age.getText();
-                    }
-
-
-                    //check
-                    File theDir = new File("./saved_files");
-                    if (!theDir.exists()){
-                        theDir.mkdirs();
-                    }
-
-
-                    List<String[]> dataLines = new ArrayList<>();
-                    dataLines.add(new String[] { subject, stage_dx, stage_sx, race, sex, age });
-
-                    csvm.save_to_csv(("./saved_files/soggetto_" + subject + ".csv"), dataLines);
-
-                    //Immagine dx
-
-                    BufferedImage bdxi = img_to_buffered(image).getSubimage(dxstart_x,dxstart_y, section_size, section_size);
-                    File imagedxfile = new File("./saved_files/soggetto_" + subject + "_dx.bmp");
-                    ImageIO.write(bdxi, "bmp", imagedxfile);
-
-                    //Immagine sx
-
-                    BufferedImage bsxi = img_to_buffered(image).getSubimage(sxstart_x,sxstart_y, section_size, section_size);
-                    File imagesxfile = new File("./saved_files/soggetto_" + subject + "_sx.bmp");
-                    ImageIO.write(bsxi, "bmp", imagesxfile);
-
-
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Info");
-                    alert.setHeaderText(null);
-                    alert.setContentText("I file "+ "soggetto_" + subject + "_dx.bmp, " + "soggetto_" + subject + "_sx.bmp e "
-                            + "soggetto_" + subject + ".csv" + " sono stati salvati con successo in saved_files.");
-                    alert.showAndWait();
                 }else{
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Soggetto: campo vuoto");
+                    alert.setTitle("Errore: anni e mesi non corretti");
                     alert.setHeaderText(null);
-                    alert.setContentText("Il valore del soggetto non è presente.");
+                    alert.setContentText("I valori di anni e mesi non sono corretti: esempi accettabili per anni sono 0, 1, 2, 16, ecc., esempi accettabili per mesi sono da 0 a 11, o lasciare vuoto se sconosciuti.");
                     alert.showAndWait();
                 }
 
             }else{
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Errore: età non corretta");
+                alert.setTitle("Errore: anni e mesi non corretti");
                 alert.setHeaderText(null);
-                alert.setContentText("Il valore del campo età non è corretto: esempi accettabili 12, 13.4, ecc., o lasciare vuoto se sconosciuta.");
+                alert.setContentText("I valori di anni e mesi non sono corretti: esempi accettabili per anni sono 0, 1, 2, 16, ecc., esempi accettabili per mesi sono da 0 a 11, o lasciare vuoto se sconosciuti.");
                 alert.showAndWait();
             }
 
@@ -467,6 +656,18 @@ public class Controller implements Initializable {
         }
         try {
             double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isInteger(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            int i = Integer.parseInt(strNum);
         } catch (NumberFormatException nfe) {
             return false;
         }

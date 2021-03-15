@@ -16,7 +16,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{//chiamato da launch
         Parent root = FXMLLoader.load(getClass().getResource("ui.fxml"));
         primaryStage.setTitle("Teeth Extractor");
-        primaryStage.setScene(new Scene(root, 1200, 750));
+        primaryStage.setScene(new Scene(root, 1200, 800));
         primaryStage.show();
     }
 
