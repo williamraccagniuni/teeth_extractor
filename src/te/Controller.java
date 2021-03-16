@@ -428,12 +428,6 @@ public class Controller implements Initializable {
                         }
 
 
-
-
-
-
-
-
                         //check saved_files folder
                         File theDir = new File("./saved_files");
                         if (!theDir.exists()){
@@ -450,10 +444,10 @@ public class Controller implements Initializable {
                                 Integer.toString((int) this.image.getWidth()),
                                 Integer.toString((int) this.image.getHeight()),
                                 Integer.toString(this.section_size),
-                                Integer.toString(this.dxstart_x + (this.section_size / 2)),
-                                Integer.toString(this.dxstart_y + (this.section_size / 2)),
-                                Integer.toString(this.sxstart_x + (this.section_size / 2)),
-                                Integer.toString(this.sxstart_y + (this.section_size / 2))});
+                                Integer.toString(this.dxstart_x),
+                                Integer.toString(this.dxstart_y),
+                                Integer.toString(this.sxstart_x),
+                                Integer.toString(this.sxstart_y)});
 
                         csvm.save_to_csv(("./saved_files/soggetto_" + subject + ".csv"), dataLines);
 
